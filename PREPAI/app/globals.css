@@ -1,0 +1,259 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #08040c; /* near-black with a warm violet tint */
+    color: #f5f3ff; /* violet-tinted white */
+    font-family:
+      ui-sans-serif,
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      "Helvetica Neue",
+      Arial,
+      sans-serif;
+  }
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #08040c;
+}
+::-webkit-scrollbar-thumb {
+  background: #3f1d3f;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #7c2d5e;
+}
+
+/* ---- Premium UI primitives ---- */
+@layer utilities {
+  /* Glass card — warm smoked glass */
+  .glass {
+    background: rgba(30, 12, 32, 0.5);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(251, 146, 60, 0.12);
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.45),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  }
+  /* Gradient border via ring trick */
+  .card-glow {
+    position: relative;
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease,
+      border-color 0.2s ease;
+  }
+  .card-glow:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 12px 44px rgba(244, 63, 94, 0.18),
+      0 0 0 1px rgba(251, 146, 60, 0.25);
+    border-color: rgba(251, 113, 133, 0.5);
+  }
+  /* Ambient background aurora — hot: fire + magenta + violet */
+  .aurora::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(
+        640px circle at 12% 8%,
+        rgba(249, 115, 22, 0.14),
+        transparent 55%
+      ),
+      radial-gradient(
+        720px circle at 88% 18%,
+        rgba(217, 70, 239, 0.12),
+        transparent 55%
+      ),
+      radial-gradient(
+        560px circle at 50% 100%,
+        rgba(139, 92, 246, 0.1),
+        transparent 55%
+      ),
+      radial-gradient(
+        420px circle at 70% 60%,
+        rgba(244, 63, 94, 0.06),
+        transparent 60%
+      );
+    z-index: 0;
+  }
+  .text-gradient {
+    background: linear-gradient(92deg, #fb923c 0%, #f472b6 45%, #a78bfa 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradientShift 6s ease infinite;
+  }
+  @keyframes gradientShift {
+    0%,
+    100% {
+      background-position: 0% center;
+    }
+    50% {
+      background-position: 100% center;
+    }
+  }
+  /* Springy lift for interactive cards/buttons */
+  .lift {
+    transition:
+      transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+      box-shadow 0.25s ease,
+      background 0.2s ease;
+    will-change: transform;
+  }
+  .lift:hover {
+    transform: translateY(-3px) scale(1.01);
+  }
+  .lift:active {
+    transform: translateY(0) scale(0.98);
+  }
+  /* Button press feedback */
+  .btn-press {
+    transition: transform 0.15s ease;
+  }
+  .btn-press:active {
+    transform: scale(0.95);
+  }
+  /* Animated glow ring for the avatar */
+  .avatar-glow {
+    position: relative;
+  }
+  .avatar-glow::after {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 9999px;
+    background: conic-gradient(from 0deg, #fb923c, #f472b6, #a78bfa, #fb923c);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+    filter: blur(4px);
+  }
+  .avatar-glow:hover::after {
+    opacity: 0.7;
+    animation: spin 3s linear infinite;
+  }
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .animate-fade-up {
+    animation: fadeUp 0.35s ease both;
+  }
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .animate-pulse-ring {
+    animation: pulseRing 1.6s ease-out infinite;
+  }
+  @keyframes pulseRing {
+    0% {
+      box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.45);
+    }
+    70% {
+      box-shadow: 0 0 0 12px rgba(239, 68, 68, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+    }
+  }
+  /* Audio equalizer bars for speaking state — hot rose */
+  .eq-bar {
+    animation: eq 0.9s ease-in-out infinite;
+    transform-origin: bottom;
+  }
+  @keyframes eq {
+    0%,
+    100% {
+      transform: scaleY(0.35);
+    }
+    50% {
+      transform: scaleY(1);
+    }
+  }
+  /* Shimmer sweep for premium buttons */
+  .btn-hot {
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-hot::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -80%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+      100deg,
+      transparent,
+      rgba(255, 255, 255, 0.35),
+      transparent
+    );
+    transform: skewX(-20deg);
+    transition: left 0.6s ease;
+  }
+  .btn-hot:hover::after {
+    left: 130%;
+  }
+}
+
+/* ---- Palette variants — set data-palette on <html> (default = aurora/orange) ---- */
+html[data-palette='ocean'] { --accent: 34 211 238; --accentText: 165 243 252; }
+html[data-palette='grape'] { --accent: 167 139 250; --accentText: 196 181 253; }
+html[data-palette='aurora'] { --accent: 251 146 60; --accentText: 253 186 116; }
+
+/* ---- Light mode — set data-mode='light' on <html> ---- */
+html[data-mode='light'] body {
+  background-color: #f6f4fb;
+  color: #1e1b2e;
+}
+html[data-mode='light'] ::-webkit-scrollbar-track { background: #f6f4fb; }
+html[data-mode='light'] ::-webkit-scrollbar-thumb { background: #d6d0e8; }
+html[data-mode='light'] .glass {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(30, 27, 46, 0.08);
+  box-shadow: 0 8px 32px rgba(30, 27, 46, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+html[data-mode='light'] .text-gradient {
+  background: linear-gradient(92deg, #ea580c 0%, #db2777 45%, #7c3aed 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+html[data-mode='light'] input,
+html[data-mode='light'] textarea,
+html[data-mode='light'] select {
+  background-color: #ffffff;
+  border-color: rgba(30, 27, 46, 0.15);
+  color: #1e1b2e;
+}
+html[data-mode='light'] .text-white { color: #1e1b2e; }
+html[data-mode='light'] .text-slate-100,
+html[data-mode='light'] .text-slate-200,
+html[data-mode='light'] .text-slate-300 { color: #44405c; }
+html[data-mode='light'] .text-slate-400,
+html[data-mode='light'] .text-slate-500 { color: #6b6787; }

@@ -1,0 +1,9 @@
+⚠ Warning: Next.js ignored package-lock.json in C:\Users\betta because it would include your home directory (C:\Users\betta).
+ To use this directory, set `turbopack.root` in your Next.js config.
+
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead.
+
+  To migrate automatically, run:
+  npx @next/codemod@canary middleware-to-proxy .
+
+  Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
