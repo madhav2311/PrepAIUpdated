@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const token = req.cookies.get(COOKIE_NAME)?.value;
     const session = token ? verifyToken(token) : null;
-    const { sessionType, transcript, metrics } = body;
+    const { sessionType, transcript, metrics, report } = body;
     const userId = session?.id ?? body.userId;
 
     if (!userId || !sessionType) {
@@ -66,6 +66,15 @@ export async function POST(req: NextRequest) {
         communicationScore: 0,
         confidenceScore: 0,
       },
+      report: report && typeof report === "object"
+        ? {
+            overallScore: report.overallScore,
+            summary: report.summary,
+            progress: report.progress,
+            strengths: report.strengths,
+            improvements: report.improvements,
+          }
+        : undefined,
     });
 
     // ---- Gamification: award XP + maintain daily streak ----

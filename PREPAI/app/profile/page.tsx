@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, FileText, Briefcase, Save, CheckCircle2, UserRound, Loader2, ImagePlus, Link2, Code, Globe, Trophy, Flame } from 'lucide-react';
+import { ArrowLeft, FileText, Upload, Briefcase, Save, CheckCircle2, UserRound, Loader2, ImagePlus, Link2, Code, Globe, Trophy, Flame, BarChart2 } from 'lucide-react';
 
 export default function ProfilePage() {
   const [targetRole, setTargetRole] = useState('');
@@ -19,6 +19,8 @@ export default function ProfilePage() {
   const [xp, setXp] = useState(0);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [parsing, setParsing] = useState(false);
+  const [parseInfo, setParseInfo] = useState('');
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState('');
 
@@ -93,6 +95,48 @@ export default function ProfilePage() {
     reader.readAsDataURL(file);
   };
 
+  // Parse an uploaded resume file (PDF / DOCX / TXT) and fill the resume textarea
+  const handleResumeFile = async (file: File) => {
+    setParsing(true);
+    setParseInfo('');
+    setError('');
+    try {
+      const name = file.name.toLowerCase();
+      let text = '';
+      if (name.endsWith('.pdf')) {
+        const pdfjs = await import('pdfjs-dist');
+        pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+        const buf = await file.arrayBuffer();
+        const doc = await pdfjs.getDocument({ data: buf }).promise;
+        const pages: string[] = [];
+        for (let i = 1; i <= doc.numPages; i++) {
+          const page = await doc.getPage(i);
+          const content = await page.getTextContent();
+          pages.push(content.items.map((item: any) => item.str).join(' '));
+        }
+        text = pages.join('\n\n');
+      } else if (name.endsWith('.docx')) {
+        // @ts-ignore -- mammoth has no bundled types for the browser build
+        const mammoth = (await import('mammoth/mammoth.browser')).default;
+        const buf = await file.arrayBuffer();
+        const result = await mammoth.extractRawText({ arrayBuffer: buf });
+        text = result.value;
+      } else if (name.endsWith('.txt') || name.endsWith('.md') || file.type === 'text/plain') {
+        text = await file.text();
+      } else {
+        throw new Error('Unsupported file type. Please upload a PDF, DOCX or TXT resume.');
+      }
+      text = text.replace(/\u0000/g, '').replace(/[ \t]{2,}/g, ' ').trim();
+      if (!text || text.length < 20) throw new Error('Could not extract text — the file may be a scanned image. Paste your resume manually instead.');
+      setResumeText((prev) => (prev.trim() ? prev + '\n\n' + text : text));
+      setParseInfo(`Imported "${file.name}" (${name.split('.').pop()?.toUpperCase()}, ${text.length.toLocaleString()} chars). You can edit it below.`);
+    } catch (err: any) {
+      setError(err?.message || 'Failed to parse resume file.');
+    } finally {
+      setParsing(false);
+    }
+  };
+
   const completion =
     [
       targetRole.trim().length > 3,
@@ -119,6 +163,9 @@ export default function ProfilePage() {
               </p>
             </div>
           </div>
+          <Link href="/analytics" className="flex items-center gap-2 text-xs text-slate-300 glass px-4 py-2 rounded-xl hover:bg-slate-800/60 transition">
+            <BarChart2 className="w-4 h-4 text-sky-400" /> View Analytics
+          </Link>
           <div className="flex items-center gap-2 text-xs text-slate-300 glass px-4 py-2 rounded-xl">
             <UserRound className="w-4 h-4 text-orange-400" />
             Profile strength: {completion}/3
@@ -265,9 +312,26 @@ export default function ProfilePage() {
                 </div>
                 <div>
                   <h2 className="font-semibold text-white">Resume / Key Experience</h2>
-                  <p className="text-xs text-slate-400">Paste highlights — projects, tech stack, achievements</p>
+                  <p className="text-xs text-slate-400">Upload a resume file or paste highlights — projects, tech stack, achievements</p>
                 </div>
+                <label
+                  htmlFor="resume-upload"
+                  className="ml-auto flex items-center gap-2 text-xs font-medium text-orange-300 border border-orange-500/40 bg-orange-500/10 hover:bg-orange-500/20 rounded-lg px-3 py-2 cursor-pointer transition"
+                >
+                  {parsing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                  {parsing ? 'Parsing...' : 'Upload Resume'}
+                </label>
+                <input
+                  id="resume-upload"
+                  type="file"
+                  accept=".pdf,.docx,.txt,.md"
+                  className="hidden"
+                  onChange={(e) => { const f = e.target.files?.[0]; if (f) handleResumeFile(f); e.target.value = ''; }}
+                />
               </div>
+              {parseInfo && (
+                <p className="text-xs text-emerald-400 mb-2 flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5" />{parseInfo}</p>
+              )}
               <textarea
                 rows={8}
                 value={resumeText}

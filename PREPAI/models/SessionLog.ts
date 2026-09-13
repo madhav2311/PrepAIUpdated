@@ -11,11 +11,20 @@ export interface ISessionMetrics {
   confidenceScore: number;
 }
 
+export interface ISessionReport {
+  overallScore?: number;
+  summary?: string;
+  progress?: string;
+  strengths?: string;
+  improvements?: string;
+}
+
 export interface ISessionLog extends Document {
   userId: mongoose.Types.ObjectId;
   sessionType: "technical" | "group-discussion";
   transcript: ITranscriptMessage[];
   metrics: ISessionMetrics;
+  report?: ISessionReport;
   createdAt: Date;
 }
 
@@ -52,6 +61,16 @@ const SessionLogSchema: Schema<ISessionLog> = new Schema({
   },
   transcript: [TranscriptMessageSchema],
   metrics: SessionMetricsSchema,
+  report: {
+    type: {
+      overallScore: { type: Number },
+      summary: { type: String },
+      progress: { type: String },
+      strengths: { type: String },
+      improvements: { type: String },
+    },
+    default: null,
+  },
   createdAt: { type: Date, default: Date.now },
 });
 

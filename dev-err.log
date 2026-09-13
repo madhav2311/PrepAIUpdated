@@ -7,3 +7,315 @@
   npx @next/codemod@canary middleware-to-proxy .
 
   Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+[browser] ./app/group-discussion/page.tsx:202:75
+Error: Expected '</', got 'ident'
+  200 | ...
+  201 | ...xt-xl font-bold text-gradient">Configure Group Discussion</h1>
+> 202 | ...t-xs text-slate-400">Panel: {['Sara (Devil's Advocate)', 'Nikhil (Analyst)', 'Ananya (...
+      |                                               ^
+  203 | ...
+  204 | ...
+  205 | ...t-xs font-medium text-slate-300 block mb-1.5">Discussion Topic</label>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/group-discussion/page.tsx [Client Component Browser]
+    ./app/group-discussion/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/group-discussion/page.tsx [Client Component SSR]
+    ./app/group-discussion/page.tsx [Server Component] 
+[browser] ./app/group-discussion/page.tsx:202:75
+Error: Expected '</', got 'ident'
+  200 | ...
+  201 | ...xt-xl font-bold text-gradient">Configure Group Discussion</h1>
+> 202 | ...t-xs text-slate-400">Panel: {['Sara (Devil's Advocate)', 'Nikhil (Analyst)', 'Ananya (...
+      |                                               ^
+  203 | ...
+  204 | ...
+  205 | ...t-xs font-medium text-slate-300 block mb-1.5">Discussion Topic</label>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/group-discussion/page.tsx [Client Component Browser]
+    ./app/group-discussion/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/group-discussion/page.tsx [Client Component SSR]
+    ./app/group-discussion/page.tsx [Server Component] 
+[Server HMR] Update failed, full reload needed: SyntaxError: Identifier 'view' has already been declared
+    at eval (<anonymous>)
+[browser] ./app/group-discussion/page.tsx:202:75
+Error: Expected '</', got 'ident'
+  200 | ...
+  201 | ...xt-xl font-bold text-gradient">Configure Group Discussion</h1>
+> 202 | ...t-xs text-slate-400">Panel: {['Sara (Devil's Advocate)', 'Nikhil (Analyst)', 'Ananya (...
+      |                                               ^
+  203 | ...
+  204 | ...
+  205 | ...t-xs font-medium text-slate-300 block mb-1.5">Discussion Topic</label>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/group-discussion/page.tsx [Client Component Browser]
+    ./app/group-discussion/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/group-discussion/page.tsx [Client Component SSR]
+    ./app/group-discussion/page.tsx [Server Component] 
+[browser] ./app/group-discussion/page.tsx:202:75
+Error: Expected '</', got 'ident'
+  200 | ...
+  201 | ...xt-xl font-bold text-gradient">Configure Group Discussion</h1>
+> 202 | ...t-xs text-slate-400">Panel: {['Sara (Devil's Advocate)', 'Nikhil (Analyst)', 'Ananya (...
+      |                                               ^
+  203 | ...
+  204 | ...
+  205 | ...t-xs font-medium text-slate-300 block mb-1.5">Discussion Topic</label>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/group-discussion/page.tsx [Client Component Browser]
+    ./app/group-discussion/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/group-discussion/page.tsx [Client Component SSR]
+    ./app/group-discussion/page.tsx [Server Component] 
+[browser] ./components/FriendCall.tsx:26:10
+Error: the name `view` is defined multiple times
+  24 |   const [connected, setConnected] = useState(false);
+  25 |   const [seconds, setSeconds] = useState(0);
+> 26 |   const [view, setView2] = useState<string>(''); // unused helper avoided
+     |          ^^^^
+  27 |
+  28 |   const pcRef = useRef<RTCPeerConnection | null>(null);
+  29 |   const audioRef = useRef<HTMLAudioElement>(null);
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./components/FriendCall.tsx [Client Component Browser]
+    ./app/friends/page.tsx [Client Component Browser]
+    ./app/friends/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/FriendCall.tsx [Client Component SSR]
+    ./app/friends/page.tsx [Client Component SSR]
+    ./app/friends/page.tsx [Server Component] 
+[browser] ./app/group-discussion/page.tsx:202:75
+Error: Expected '</', got 'ident'
+  200 | ...
+  201 | ...xt-xl font-bold text-gradient">Configure Group Discussion</h1>
+> 202 | ...t-xs text-slate-400">Panel: {['Sara (Devil's Advocate)', 'Nikhil (Analyst)', 'Ananya (...
+      |                                               ^
+  203 | ...
+  204 | ...
+  205 | ...t-xs font-medium text-slate-300 block mb-1.5">Discussion Topic</label>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/group-discussion/page.tsx [Client Component Browser]
+    ./app/group-discussion/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/group-discussion/page.tsx [Client Component SSR]
+    ./app/group-discussion/page.tsx [Server Component] 
+[browser] ./app/group-discussion/page.tsx:202:75
+Error: Expected '</', got 'ident'
+  200 | ...
+  201 | ...xt-xl font-bold text-gradient">Configure Group Discussion</h1>
+> 202 | ...t-xs text-slate-400">Panel: {['Sara (Devil's Advocate)', 'Nikhil (Analyst)', 'Ananya (...
+      |                                               ^
+  203 | ...
+  204 | ...
+  205 | ...t-xs font-medium text-slate-300 block mb-1.5">Discussion Topic</label>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/group-discussion/page.tsx [Client Component Browser]
+    ./app/group-discussion/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/group-discussion/page.tsx [Client Component SSR]
+    ./app/group-discussion/page.tsx [Server Component] 
+[browser] ./components/FriendCall.tsx:26:10
+Error: the name `view` is defined multiple times
+  24 |   const [connected, setConnected] = useState(false);
+  25 |   const [seconds, setSeconds] = useState(0);
+> 26 |   const [view, setView2] = useState<string>(''); // unused helper avoided
+     |          ^^^^
+  27 |
+  28 |   const pcRef = useRef<RTCPeerConnection | null>(null);
+  29 |   const audioRef = useRef<HTMLAudioElement>(null);
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./components/FriendCall.tsx [Client Component Browser]
+    ./app/friends/page.tsx [Client Component Browser]
+    ./app/friends/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/FriendCall.tsx [Client Component SSR]
+    ./app/friends/page.tsx [Client Component SSR]
+    ./app/friends/page.tsx [Server Component] 
+[browser] ./app/group-discussion/page.tsx:202:75
+Error: Expected '</', got 'ident'
+  200 | ...
+  201 | ...xt-xl font-bold text-gradient">Configure Group Discussion</h1>
+> 202 | ...t-xs text-slate-400">Panel: {['Sara (Devil's Advocate)', 'Nikhil (Analyst)', 'Ananya (...
+      |                                               ^
+  203 | ...
+  204 | ...
+  205 | ...t-xs font-medium text-slate-300 block mb-1.5">Discussion Topic</label>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/group-discussion/page.tsx [Client Component Browser]
+    ./app/group-discussion/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/group-discussion/page.tsx [Client Component SSR]
+    ./app/group-discussion/page.tsx [Server Component] 
+[browser] ./app/group-discussion/page.tsx:202:75
+Error: Expected '</', got 'ident'
+  200 | ...
+  201 | ...xt-xl font-bold text-gradient">Configure Group Discussion</h1>
+> 202 | ...t-xs text-slate-400">Panel: {['Sara (Devil's Advocate)', 'Nikhil (Analyst)', 'Ananya (...
+      |                                               ^
+  203 | ...
+  204 | ...
+  205 | ...t-xs font-medium text-slate-300 block mb-1.5">Discussion Topic</label>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/group-discussion/page.tsx [Client Component Browser]
+    ./app/group-discussion/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/group-discussion/page.tsx [Client Component SSR]
+    ./app/group-discussion/page.tsx [Server Component] 
+[browser] ./components/FriendCall.tsx:26:10
+Error: the name `view` is defined multiple times
+  24 |   const [connected, setConnected] = useState(false);
+  25 |   const [seconds, setSeconds] = useState(0);
+> 26 |   const [view, setView2] = useState<string>(''); // unused helper avoided
+     |          ^^^^
+  27 |
+  28 |   const pcRef = useRef<RTCPeerConnection | null>(null);
+  29 |   const audioRef = useRef<HTMLAudioElement>(null);
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./components/FriendCall.tsx [Client Component Browser]
+    ./app/friends/page.tsx [Client Component Browser]
+    ./app/friends/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/FriendCall.tsx [Client Component SSR]
+    ./app/friends/page.tsx [Client Component SSR]
+    ./app/friends/page.tsx [Server Component] 
+[browser] ./components/FriendCall.tsx:26:10
+Error: the name `view` is defined multiple times
+  24 |   const [connected, setConnected] = useState(false);
+  25 |   const [seconds, setSeconds] = useState(0);
+> 26 |   const [view, setView2] = useState<string>(''); // unused helper avoided
+     |          ^^^^
+  27 |
+  28 |   const pcRef = useRef<RTCPeerConnection | null>(null);
+  29 |   const audioRef = useRef<HTMLAudioElement>(null);
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./components/FriendCall.tsx [Client Component Browser]
+    ./app/friends/page.tsx [Client Component Browser]
+    ./app/friends/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/FriendCall.tsx [Client Component SSR]
+    ./app/friends/page.tsx [Client Component SSR]
+    ./app/friends/page.tsx [Server Component] 
+[browser] ./app/group-discussion/page.tsx:202:75
+Error: Expected '</', got 'ident'
+  200 | ...
+  201 | ...xt-xl font-bold text-gradient">Configure Group Discussion</h1>
+> 202 | ...t-xs text-slate-400">Panel: {['Sara (Devil's Advocate)', 'Nikhil (Analyst)', 'Ananya (...
+      |                                               ^
+  203 | ...
+  204 | ...
+  205 | ...t-xs font-medium text-slate-300 block mb-1.5">Discussion Topic</label>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/group-discussion/page.tsx [Client Component Browser]
+    ./app/group-discussion/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/group-discussion/page.tsx [Client Component SSR]
+    ./app/group-discussion/page.tsx [Server Component] 
+[browser] ./app/group-discussion/page.tsx:202:75
+Error: Expected '</', got 'ident'
+  200 | ...
+  201 | ...xt-xl font-bold text-gradient">Configure Group Discussion</h1>
+> 202 | ...t-xs text-slate-400">Panel: {['Sara (Devil's Advocate)', 'Nikhil (Analyst)', 'Ananya (...
+      |                                               ^
+  203 | ...
+  204 | ...
+  205 | ...t-xs font-medium text-slate-300 block mb-1.5">Discussion Topic</label>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./app/group-discussion/page.tsx [Client Component Browser]
+    ./app/group-discussion/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/group-discussion/page.tsx [Client Component SSR]
+    ./app/group-discussion/page.tsx [Server Component] 
+[browser] ./components/FriendCall.tsx:26:10
+Error: the name `view` is defined multiple times
+  24 |   const [connected, setConnected] = useState(false);
+  25 |   const [seconds, setSeconds] = useState(0);
+> 26 |   const [view, setView2] = useState<string>(''); // unused helper avoided
+     |          ^^^^
+  27 |
+  28 |   const pcRef = useRef<RTCPeerConnection | null>(null);
+  29 |   const audioRef = useRef<HTMLAudioElement>(null);
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./components/FriendCall.tsx [Client Component Browser]
+    ./app/friends/page.tsx [Client Component Browser]
+    ./app/friends/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/FriendCall.tsx [Client Component SSR]
+    ./app/friends/page.tsx [Client Component SSR]
+    ./app/friends/page.tsx [Server Component] 

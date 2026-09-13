@@ -81,6 +81,12 @@ export default function DashboardPage() {
             >
               <Trophy className="w-4 h-4 text-yellow-400" /> Leaderboard
             </Link>
+            <Link
+              href="/analytics"
+              className="glass text-slate-300 text-sm rounded-xl px-4 py-2 flex items-center gap-2 hover:bg-slate-800/60 transition"
+            >
+              <BarChart2 className="w-4 h-4 text-sky-400" /> Analytics
+            </Link>
             <UserBadge />
           </div>
         </div>

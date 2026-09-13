@@ -224,6 +224,146 @@ html[data-palette='ocean'] { --accent: 34 211 238; --accentText: 165 243 252; }
 html[data-palette='grape'] { --accent: 167 139 250; --accentText: 196 181 253; }
 html[data-palette='aurora'] { --accent: 251 146 60; --accentText: 253 186 116; }
 
+/* ---- Palette theming: remap the orange accent utilities so the whole UI follows the palette ----
+   The app hardcodes orange-* Tailwind classes as its accent color everywhere.
+   For ocean/grape, override those exact utilities with the palette's accent hue. */
+
+/* Ocean: orange -> cyan/blue */
+html[data-palette='ocean'] .text-orange-300,
+html[data-palette='ocean'] .text-orange-400,
+html[data-palette='ocean'] .text-orange-500 { color: #22d3ee; }
+html[data-palette='ocean'] .text-orange-950 { color: #083344; }
+html[data-palette='ocean'] .bg-orange-500,
+html[data-palette='ocean'] .hover\:bg-orange-400:hover { background-color: #06b6d4; }
+html[data-palette='ocean'] .bg-orange-400 { background-color: #22d3ee; }
+html[data-palette='ocean'] .bg-orange-950,
+html[data-palette='ocean'] .bg-orange-950\/40,
+html[data-palette='ocean'] .bg-orange-950\/60 { background-color: rgba(8, 51, 68, 0.5); }
+html[data-palette='ocean'] .bg-orange-500\/10 { background-color: rgba(34, 211, 238, 0.1); }
+html[data-palette='ocean'] .bg-orange-500\/20 { background-color: rgba(34, 211, 238, 0.2); }
+html[data-palette='ocean'] .border-orange-500,
+html[data-palette='ocean'] .border-orange-700,
+html[data-palette='ocean'] .border-orange-500\/40,
+html[data-palette='ocean'] .border-orange-500\/25,
+html[data-palette='ocean'] .hover\:border-orange-500:hover { border-color: rgba(34, 211, 238, 0.5); }
+html[data-palette='ocean'] .from-orange-500,
+html[data-palette='ocean'] .hover\:from-orange-400:hover { --tw-gradient-from: #06b6d4; }
+html[data-palette='ocean'] .to-rose-500,
+html[data-palette='ocean'] .hover\:to-rose-400:hover { --tw-gradient-to: #3b82f6; }
+html[data-palette='ocean'] .from-orange-400 { --tw-gradient-from: #22d3ee; }
+html[data-palette='ocean'] .to-rose-400 { --tw-gradient-to: #60a5fa; }
+html[data-palette='ocean'] .shadow-orange-500\/30 { --tw-shadow-color: rgba(34, 211, 238, 0.3); }
+html[data-palette='ocean'] .ring-orange-500\/30 { --tw-ring-color: rgba(34, 211, 238, 0.3); }
+html[data-palette='ocean'] .focus\:border-orange-500:focus { border-color: #22d3ee; }
+
+/* Ocean: emerald (used on auth page, buttons, icons) -> cyan/blue */
+html[data-palette='ocean'] .text-emerald-300,
+html[data-palette='ocean'] .text-emerald-400,
+html[data-palette='ocean'] .text-emerald-500 { color: #22d3ee; }
+html[data-palette='ocean'] .bg-emerald-500,
+html[data-palette='ocean'] .hover\:bg-emerald-400:hover { background-color: #06b6d4; }
+html[data-palette='ocean'] .bg-emerald-400 { background-color: #22d3ee; }
+html[data-palette='ocean'] .bg-emerald-500\/10 { background-color: rgba(34, 211, 238, 0.1); }
+html[data-palette='ocean'] .bg-emerald-500\/15 { background-color: rgba(34, 211, 238, 0.15); }
+html[data-palette='ocean'] .border-emerald-500,
+html[data-palette='ocean'] .border-emerald-500\/40,
+html[data-palette='ocean'] .border-emerald-500\/50,
+html[data-palette='ocean'] .border-emerald-500\/25,
+html[data-palette='ocean'] .hover\:border-emerald-500\/40:hover { border-color: rgba(34, 211, 238, 0.5); }
+html[data-palette='ocean'] .from-emerald-500,
+html[data-palette='ocean'] .hover\:from-emerald-400:hover { --tw-gradient-from: #06b6d4; }
+html[data-palette='ocean'] .from-emerald-600 { --tw-gradient-from: #0891b2; }
+html[data-palette='ocean'] .from-emerald-400 { --tw-gradient-from: #22d3ee; }
+html[data-palette='ocean'] .to-teal-600,
+html[data-palette='ocean'] .to-emerald-400 { --tw-gradient-to: #3b82f6; }
+html[data-palette='ocean'] .shadow-emerald-500\/25 { --tw-shadow-color: rgba(34, 211, 238, 0.25); }
+html[data-palette='ocean'] .shadow-emerald-500\/30 { --tw-shadow-color: rgba(34, 211, 238, 0.3); }
+html[data-palette='ocean'] .ring-emerald-500\/30 { --tw-ring-color: rgba(34, 211, 238, 0.3); }
+html[data-palette='ocean'] .text-gradient {
+  background: linear-gradient(92deg, #22d3ee 0%, #60a5fa 50%, #818cf8 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+html[data-palette='ocean'] .eq-bar { background-color: #22d3ee; }
+html[data-palette='ocean'] .avatar-glow::after { background: conic-gradient(from 0deg, #22d3ee, #60a5fa, #818cf8, #22d3ee); }
+html[data-palette='ocean'] .aurora::before {
+  background:
+    radial-gradient(640px circle at 12% 8%, rgba(34, 211, 238, 0.14), transparent 55%),
+    radial-gradient(720px circle at 88% 18%, rgba(59, 130, 246, 0.12), transparent 55%),
+    radial-gradient(560px circle at 50% 100%, rgba(99, 102, 241, 0.10), transparent 55%),
+    radial-gradient(420px circle at 70% 60%, rgba(14, 165, 233, 0.06), transparent 60%);
+}
+
+/* Grape: orange -> violet/purple */
+html[data-palette='grape'] .text-orange-300,
+html[data-palette='grape'] .text-orange-400,
+html[data-palette='grape'] .text-orange-500 { color: #a78bfa; }
+html[data-palette='grape'] .text-orange-950 { color: #2e1065; }
+html[data-palette='grape'] .bg-orange-500,
+html[data-palette='grape'] .hover\:bg-orange-400:hover { background-color: #8b5cf6; }
+html[data-palette='grape'] .bg-orange-400 { background-color: #a78bfa; }
+html[data-palette='grape'] .bg-orange-950,
+html[data-palette='grape'] .bg-orange-950\/40,
+html[data-palette='grape'] .bg-orange-950\/60 { background-color: rgba(46, 16, 101, 0.5); }
+html[data-palette='grape'] .bg-orange-500\/10 { background-color: rgba(167, 139, 250, 0.1); }
+html[data-palette='grape'] .bg-orange-500\/20 { background-color: rgba(167, 139, 250, 0.2); }
+html[data-palette='grape'] .border-orange-500,
+html[data-palette='grape'] .border-orange-700,
+html[data-palette='grape'] .border-orange-500\/40,
+html[data-palette='grape'] .border-orange-500\/25,
+html[data-palette='grape'] .hover\:border-orange-500:hover { border-color: rgba(167, 139, 250, 0.5); }
+html[data-palette='grape'] .from-orange-500,
+html[data-palette='grape'] .hover\:from-orange-400:hover { --tw-gradient-from: #8b5cf6; }
+html[data-palette='grape'] .to-rose-500,
+html[data-palette='grape'] .hover\:to-rose-400:hover { --tw-gradient-to: #d946ef; }
+html[data-palette='grape'] .from-orange-400 { --tw-gradient-from: #a78bfa; }
+html[data-palette='grape'] .to-rose-400 { --tw-gradient-to: #e879f9; }
+html[data-palette='grape'] .shadow-orange-500\/30 { --tw-shadow-color: rgba(167, 139, 250, 0.3); }
+html[data-palette='grape'] .ring-orange-500\/30 { --tw-ring-color: rgba(167, 139, 250, 0.3); }
+html[data-palette='grape'] .focus\:border-orange-500:focus { border-color: #a78bfa; }
+
+/* Grape: emerald -> violet/purple */
+html[data-palette='grape'] .text-emerald-300,
+html[data-palette='grape'] .text-emerald-400,
+html[data-palette='grape'] .text-emerald-500 { color: #a78bfa; }
+html[data-palette='grape'] .bg-emerald-500,
+html[data-palette='grape'] .hover\:bg-emerald-400:hover { background-color: #8b5cf6; }
+html[data-palette='grape'] .bg-emerald-400 { background-color: #a78bfa; }
+html[data-palette='grape'] .bg-emerald-500\/10 { background-color: rgba(167, 139, 250, 0.1); }
+html[data-palette='grape'] .bg-emerald-500\/15 { background-color: rgba(167, 139, 250, 0.15); }
+html[data-palette='grape'] .border-emerald-500,
+html[data-palette='grape'] .border-emerald-500\/40,
+html[data-palette='grape'] .border-emerald-500\/50,
+html[data-palette='grape'] .border-emerald-500\/25,
+html[data-palette='grape'] .hover\:border-emerald-500\/40:hover { border-color: rgba(167, 139, 250, 0.5); }
+html[data-palette='grape'] .from-emerald-500,
+html[data-palette='grape'] .hover\:from-emerald-400:hover { --tw-gradient-from: #8b5cf6; }
+html[data-palette='grape'] .from-emerald-600 { --tw-gradient-from: #7c3aed; }
+html[data-palette='grape'] .from-emerald-400 { --tw-gradient-from: #a78bfa; }
+html[data-palette='grape'] .to-teal-600,
+html[data-palette='grape'] .to-emerald-400 { --tw-gradient-to: #d946ef; }
+html[data-palette='grape'] .shadow-emerald-500\/25 { --tw-shadow-color: rgba(167, 139, 250, 0.25); }
+html[data-palette='grape'] .shadow-emerald-500\/30 { --tw-shadow-color: rgba(167, 139, 250, 0.3); }
+html[data-palette='grape'] .ring-emerald-500\/30 { --tw-ring-color: rgba(167, 139, 250, 0.3); }
+html[data-palette='grape'] .text-gradient {
+  background: linear-gradient(92deg, #a78bfa 0%, #e879f9 50%, #f472b6 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+html[data-palette='grape'] .eq-bar { background-color: #a78bfa; }
+html[data-palette='grape'] .avatar-glow::after { background: conic-gradient(from 0deg, #a78bfa, #e879f9, #f472b6, #a78bfa); }
+html[data-palette='grape'] .aurora::before {
+  background:
+    radial-gradient(640px circle at 12% 8%, rgba(167, 139, 250, 0.14), transparent 55%),
+    radial-gradient(720px circle at 88% 18%, rgba(217, 70, 239, 0.12), transparent 55%),
+    radial-gradient(560px circle at 50% 100%, rgba(139, 92, 246, 0.10), transparent 55%),
+    radial-gradient(420px circle at 70% 60%, rgba(236, 72, 153, 0.06), transparent 60%);
+}
+
 /* ---- Light mode — set data-mode='light' on <html> ---- */
 html[data-mode='light'] body {
   background-color: #f6f4fb;
@@ -237,7 +377,7 @@ html[data-mode='light'] .glass {
   border: 1px solid rgba(30, 27, 46, 0.08);
   box-shadow: 0 8px 32px rgba(30, 27, 46, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
-html[data-mode='light'] .text-gradient {
+html[data-mode='light']:not([data-palette='ocean']):not([data-palette='grape']) .text-gradient {
   background: linear-gradient(92deg, #ea580c 0%, #db2777 45%, #7c3aed 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
@@ -257,3 +397,52 @@ html[data-mode='light'] .text-slate-200,
 html[data-mode='light'] .text-slate-300 { color: #44405c; }
 html[data-mode='light'] .text-slate-400,
 html[data-mode='light'] .text-slate-500 { color: #6b6787; }
+
+/* Remap dark surface utility classes to light equivalents so every screen adapts */
+html[data-mode='light'] body,
+html[data-mode='light'] .bg-slate-950,
+html[data-mode='light'] .bg-slate-900 { background-color: #f6f4fb; }
+html[data-mode='light'] .bg-slate-950\/60,
+html[data-mode='light'] .bg-slate-950\/70 { background-color: rgba(255, 255, 255, 0.75); }
+html[data-mode='light'] .bg-slate-800,
+html[data-mode='light'] .hover\:bg-slate-800:hover,
+html[data-mode='light'] .hover\:bg-slate-800\/60:hover { background-color: #e7e2f2; }
+html[data-mode='light'] .bg-slate-900 { background-color: #ece8f6; }
+html[data-mode='light'] .hover\:bg-slate-900\/60:hover { background-color: #e7e2f2; }
+html[data-mode='light'] .border-slate-800,
+html[data-mode='light'] .border-slate-900,
+html[data-mode='light'] .hover\:border-slate-700:hover,
+html[data-mode='light'] .hover\:border-slate-600:hover { border-color: rgba(30, 27, 46, 0.14); }
+html[data-mode='light'] .bg-slate-950,
+html[data-mode='light'] .bg-slate-900 { color: #1e1b2e; }
+
+/* Colored accent backgrounds: use the tint variants (they read well on light too) */
+html[data-mode='light'] .bg-orange-950,
+html[data-mode='light'] .bg-orange-950\/40,
+html[data-mode='light'] .bg-orange-950\/60 { background-color: rgba(234, 88, 12, 0.1); }
+
+/* Accent text colors stay saturated but get darker, more readable tones */
+html[data-mode='light'] .text-orange-300,
+html[data-mode='light'] .text-orange-400 { color: #c2410c; }
+html[data-mode='light'] .text-cyan-300,
+html[data-mode='light'] .text-cyan-400 { color: #0e7490; }
+html[data-mode='light'] .text-emerald-300,
+html[data-mode='light'] .text-emerald-400 { color: #047857; }
+html[data-mode='light'] .text-violet-300,
+html[data-mode='light'] .text-violet-400 { color: #6d28d9; }
+html[data-mode='light'] .text-fuchsia-300,
+html[data-mode='light'] .text-fuchsia-400 { color: #a21caf; }
+html[data-mode='light'] .text-rose-300,
+html[data-mode='light'] .text-rose-400 { color: #be123c; }
+html[data-mode='light'] .text-amber-300,
+html[data-mode='light'] .text-amber-400 { color: #b45309; }
+html[data-mode='light'] .text-yellow-300,
+html[data-mode='light'] .text-yellow-400 { color: #a16207; }
+html[data-mode='light'] .text-indigo-300,
+html[data-mode='light'] .text-indigo-400 { color: #4338ca; }
+
+/* Auroras and colored translucent panels: soften for light backgrounds */
+html[data-mode='light'] .aurora::before { opacity: 0.5; }
+
+/* Gradient buttons keep dark text — fine on light too */
+html[data-mode='light'] .eq-bar { background-color: #0e7490; }

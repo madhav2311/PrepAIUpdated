@@ -57,7 +57,20 @@ export async function POST(req: Request) {
       questionIndex,
       role,
       difficulty = "medium",
+      style = "real",
+      pastSessions,
     } = await req.json();
+
+    const isFriendly = style === "friendly";
+
+    // Build a compact summary of the user's past interview sessions so the AI can
+    // track growth, revisit weak areas, and acknowledge improvement.
+    const pastBlock = Array.isArray(pastSessions) && pastSessions.length > 0
+      ? `
+      CANDIDATE'S PAST PERFORMANCE (previous ${pastSessions.length} interview session(s), newest last):
+      ${(pastSessions as any[]).map((s, i) => `Session ${i + 1}: overall ${s.overall ?? "n/a"}, technical ${s.technical ?? "n/a"}, communication ${s.communication ?? "n/a"}, confidence ${s.confidence ?? "n/a"}${s.weakness ? `, weak areas noted: ${s.weakness}` : ""}`).join("; ")}
+      Use this to: (1) notice real progress and call it out, (2) gently revisit areas where scores stayed low, (3) calibrate difficulty to stretch the candidate just beyond their current level.`
+      : "";
 
     const diff: string = ["easy", "medium", "hard"].includes(difficulty)
       ? difficulty
@@ -72,6 +85,12 @@ export async function POST(req: Request) {
     // ---- Session is capped at MAX_QUESTIONS questions. After the final answer,
     // ---- produce a complete evaluation report instead of another question.
     if (idx >= MAX_QUESTIONS) {
+      const pastReportBlock = Array.isArray(pastSessions) && pastSessions.length > 0
+        ? `
+      CANDIDATE'S PAST SESSION SCORES (newest last):
+      ${(pastSessions as any[]).map((s: any, i: number) => `Session ${i + 1}: overall ${s.overall ?? "n/a"}, technical ${s.technical ?? "n/a"}, communication ${s.communication ?? "n/a"}, confidence ${s.confidence ?? "n/a"}${s.weakness ? `, weak areas: ${s.weakness}` : ""}`).join("; ")}
+      In "progress", compare today's performance against these past sessions — is the candidate improving? Reference concrete deltas.`
+        : "";
       const transcript = (
         Array.isArray(conversationHistory) ? conversationHistory : []
       )
@@ -88,7 +107,7 @@ Candidate Resume Summary: ${resumeContext || "Standard developer background"}
 FULL TRANSCRIPT:
 ${transcript}
 
-Write a rigorous, honest evaluation of the CANDIDATE across the whole session. Score 0-100 each.
+Write a ${isFriendly ? "warm but honest coach-style" : "rigorous, honest"} evaluation of the CANDIDATE across the whole session. Score 0-100 each.${pastReportBlock}
 Return JSON only (no markdown fences):
 {
   "overallScore": 0-100,
@@ -96,8 +115,9 @@ Return JSON only (no markdown fences):
   "communicationScore": 0-100,
   "confidenceScore": 0-100,
   "summary": "2-3 sentence overall verdict",
+  "progress": "1-2 sentences comparing this session to the past sessions above (or 'First recorded session — a baseline has been set' if none)",
   "strengths": "2-3 specific things done well (one line each)",
-  "improvements": "3 specific, actionable improvements",
+  "improvements": "3 specific, actionable improvements tied to recurring mistakes across past and current sessions",
   "questionFeedback": [
     { "question": "short question text", "feedback": "one-line feedback on their answer" }
   ]
@@ -151,6 +171,10 @@ Return JSON only (no markdown fences):
             "Interview complete. The AI judge was unavailable, so scores are provisional.",
           strengths:
             "You completed the full session and answered every question.",
+          progress:
+            Array.isArray(pastSessions) && pastSessions.length > 0
+              ? "The AI judge was unavailable, so no comparison could be made this time."
+              : "First recorded session — a baseline has been set.",
           improvements:
             "Review the transcript and tighten one concrete example per answer.",
           questionFeedback: [],
@@ -161,11 +185,13 @@ Return JSON only (no markdown fences):
 
     // Q1 is ALWAYS a natural human opener — no AI call, instant, can never skip the warm-up.
     if (idx === 0) {
+      const opener = isFriendly
+        ? "Heyy, great to see you again! Okay so — forget the formal stuff, think of this as two friends doing a practice run. I've seen your resume and your past practice scores, so I know what you're good at. To kick off, just tell me your story — what've you been building, what are you aiming for? No pressure, I'm on your side. 🙂"
+        : "Hi, thanks so much for taking the time to chat with me today. I've gone through your resume — before we dive into anything technical, I'd love to hear your story. Tell me a bit about yourself: your background, what you've worked on, and what you're looking for in your next role.";
       return NextResponse.json({
         success: true,
         evaluation: "",
-        nextQuestion:
-          "Hi, thanks so much for taking the time to chat with me today. I've gone through your resume — before we dive into anything technical, I'd love to hear your story. Tell me a bit about yourself: your background, what you've worked on, and what you're looking for in your next role.",
+        nextQuestion: opener,
         currentLevel: "easy",
       });
     }
@@ -192,10 +218,19 @@ Return JSON only (no markdown fences):
         ? "This is the very FIRST question of the interview: open naturally and warmly, exactly like a human interviewer would (a brief friendly acknowledgment is fine), then ask an easy opener such as 'Tell me about yourself' or an invitation to walk through their background."
         : `Difficulty for this question: ${currentLevel.toUpperCase()} (the session is selected as '${diff}' and ramps up gradually — never jump to a hard topic before earlier levels have been covered).`;
 
+    const personaBlock = isFriendly
+      ? `
+      PERSONA — FRIENDLY COACH MODE: You are the candidate's supportive friend and mentor, not a corporate interviewer. Talk casually and warmly ("Hey, good one!", "Okay so here's a thought..."), like a knowledgeable friend helping them practice over coffee.
+      OFF-TOPIC RULE (very important): If the candidate asks YOU a question — technical doubt, career advice, life stuff, anything outside the interview — answer it genuinely and helpfully, like a friend would. Do NOT refuse or say "let's stay on track". After answering briefly and helpfully, naturally bridge back to the interview topic with the next question.
+      GROWTH FOCUS: You know their past session scores and weak areas. Reference them naturally ("Last time system design tripped you up — let's poke at it a bit today"). Celebrate improvement when scores went up.
+      You still evaluate each answer and keep an internal sense of rigor, but your tone stays friendly and never intimidating.`
+      : `You are a professional, realistic interviewer. Keep responses concise, professional, and natural — like a real hiring interview.`;
+
     const prompt = `
-      You are an expert technical interviewer conducting a live mock interview.
+      You are conducting a live mock interview.
+      ${personaBlock}
       Target Role / Job Description: ${jdContext || role || "General Software Engineer"}
-      Candidate Resume Summary: ${resumeContext || "Standard developer background"}
+      Candidate Resume Summary: ${resumeContext || "Standard developer background"}${pastBlock}
 
       Conversation History (recent only):
       ${JSON.stringify((Array.isArray(conversationHistory) ? conversationHistory : []).slice(-6))}
@@ -206,7 +241,7 @@ Return JSON only (no markdown fences):
       ${levelHints[currentLevel]}${askedBlock}
       Vary the question type (background, project deep-dive, system design, debugging, behavioral, trade-offs) so no two questions feel alike. NEVER ask a question similar to one already asked.
 
-      Your task: Evaluate their response briefly (encouraging and specific — like a real interviewer acknowledging a good point), and ask the next adaptive question based strictly on their resume, the target job description, and the CURRENT difficulty level. Keep it concise, professional, and natural. Return JSON only (no markdown fences):
+      Your task: Evaluate their response briefly (${isFriendly ? "warm, specific, hype them up a little like a supportive friend" : "encouraging and specific — like a real interviewer acknowledging a good point"}), and ask the next adaptive question based strictly on their resume, the target job description, and the CURRENT difficulty level. Keep it concise and natural. Return JSON only (no markdown fences):
       {
         "evaluation": "Short feedback on their last answer",
         "nextQuestion": "The next interview question",

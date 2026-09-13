@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Sparkles, Mic, MicOff, Send, Volume2, SkipForward, FileText, Briefcase, UserRound, GraduationCap, Gauge, Signal, ClipboardCheck, CheckCircle2, TrendingUp, Target } from 'lucide-react';
+import { ArrowLeft, Sparkles, Mic, MicOff, Send, Volume2, SkipForward, FileText, Briefcase, UserRound, GraduationCap, Gauge, Signal, ClipboardCheck, CheckCircle2, TrendingUp, Target, HeartHandshake, History } from 'lucide-react';
 import { speak, stopSpeaking, loadVoices } from '@/lib/speech';
 
 const ROLE_PRESETS: { label: string; jd: string }[] = [
@@ -29,6 +29,8 @@ export default function InterviewRoomPage() {
   const questionIndexRef = React.useRef(0);
   const [report, setReport] = useState<any>(null);
   const [savingReport, setSavingReport] = useState(false);
+  const [style, setStyle] = useState<'friendly' | 'real'>('real');
+  const [pastSessions, setPastSessions] = useState<{ overall: number; technical: number; communication: number; confidence: number; weakness?: string; date: string }[]>([]);
 
   const MAX_QUESTIONS = 7;
 
@@ -42,6 +44,25 @@ export default function InterviewRoomPage() {
 
   // Pre-load browser voices (they load async in Chrome)
   React.useEffect(() => { loadVoices(); }, []);
+
+  // Load previous interview sessions so the AI can use them as context (scores & growth)
+  React.useEffect(() => {
+    fetch('/api/sessions', { cache: 'no-store' })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        const logs = (data?.sessions || []).filter((s: any) => s.sessionType === 'interview').slice(0, 10);
+        const mapped = logs.map((s: any) => ({
+          overall: s.metrics?.overallScore ?? Math.round(((s.metrics?.technicalScore ?? 0) + (s.metrics?.communicationScore ?? 0) + (s.metrics?.confidenceScore ?? 0)) / 3),
+          technical: s.metrics?.technicalScore ?? 0,
+          communication: s.metrics?.communicationScore ?? 0,
+          confidence: s.metrics?.confidenceScore ?? 0,
+          weakness: s.report?.improvements || '',
+          date: new Date(s.createdAt).toLocaleDateString(),
+        }));
+        setPastSessions(mapped.reverse()); // oldest first so the AI sees the arc
+      })
+      .catch(() => { });
+  }, []);
 
   const speakText = (text: string) => {
     // Interviewer voice: consistent persona, faster pace
@@ -148,7 +169,9 @@ export default function InterviewRoomPage() {
           conversationHistory: [],
           askedQuestions: [],
           questionIndex: 0,
-          difficulty
+          difficulty,
+          style,
+          pastSessions: pastSessions.slice(-5)
         })
       });
       const data = await res.json();
@@ -195,7 +218,9 @@ export default function InterviewRoomPage() {
           conversationHistory: updatedMessages,
           askedQuestions: askedRef.current,
           questionIndex: questionIndexRef.current,
-          difficulty
+          difficulty,
+          style,
+          pastSessions: pastSessions.slice(-5)
         })
       });
 
@@ -216,6 +241,13 @@ export default function InterviewRoomPage() {
                 technicalScore: data.report.technicalScore ?? 0,
                 communicationScore: data.report.communicationScore ?? 0,
                 confidenceScore: data.report.confidenceScore ?? 0,
+              },
+              report: {
+                overallScore: data.report.overallScore,
+                summary: data.report.summary,
+                progress: data.report.progress,
+                strengths: data.report.strengths,
+                improvements: data.report.improvements,
               },
             }),
           });
@@ -274,6 +306,50 @@ export default function InterviewRoomPage() {
               </button>
             ))}
           </div>
+
+          {/* Style selector */}
+          <div className="mb-4">
+            <label className="text-xs font-medium text-slate-300 flex items-center gap-2 mb-1.5">
+              <HeartHandshake className="w-4 h-4 text-orange-400" /> Interview Style
+            </label>
+            <div className="grid grid-cols-2 gap-2">
+              {([
+                { id: 'friendly', label: 'Friendly Coach', desc: 'Chats like a friend — ask it anything, even off-topic. It uses your past scores to help you grow.' },
+                { id: 'real', label: 'Real Interviewer', desc: 'Strict, professional hiring-style interview. Off-topic questions get gently deflected.' },
+              ] as const).map((s) => (
+                <button
+                  key={s.id}
+                  type="button"
+                  onClick={() => setStyle(s.id)}
+                  className={`text-left px-3 py-2.5 rounded-xl border transition ${style === s.id
+                    ? 'bg-emerald-500/15 border-emerald-500/50 text-emerald-300'
+                    : 'bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-600'
+                    }`}
+                >
+                  <span className="block text-xs font-semibold">{s.label}</span>
+                  <span className="block text-[10px] text-slate-500 mt-0.5 leading-snug">{s.desc}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Past performance / profile-building card */}
+          {pastSessions.length > 0 && (
+            <div className="bg-slate-950 border border-slate-800 rounded-xl p-3 mb-4 text-xs">
+              <span className="text-[10px] uppercase tracking-wider text-orange-400 font-semibold flex items-center gap-1.5 mb-2">
+                <History className="w-3.5 h-3.5" /> Your Interview Progress ({pastSessions.length} session{pastSessions.length > 1 ? 's' : ''})
+              </span>
+              <div className="flex items-end gap-1.5 h-14">
+                {pastSessions.slice(-8).map((s, i) => (
+                  <div key={i} className="flex-1 flex flex-col items-center gap-1" title={`Overall ${s.overall} · ${s.date}`}>
+                    <div className="w-full bg-gradient-to-t from-orange-600 to-orange-400 rounded-t" style={{ height: `${Math.max(8, s.overall)}%` }} />
+                    <span className="text-[9px] text-slate-500">{s.overall}</span>
+                  </div>
+                ))}
+              </div>
+              <p className="text-[10px] text-slate-500 mt-2">Your score history is fed into every interview so the AI tracks your growth and targets your weak areas.</p>
+            </div>
+          )}
 
           {/* Difficulty selector */}
           <div className="mb-4">
@@ -429,6 +505,11 @@ export default function InterviewRoomPage() {
             {scoreRow('Confidence', report.confidenceScore ?? 0, <TrendingUp className="w-3.5 h-3.5" />)}
           </div>
           {report.summary && <p className="text-sm text-slate-300 leading-relaxed mb-4">{report.summary}</p>}
+          {report.progress && (
+            <div className="bg-cyan-500/10 border border-cyan-500/25 rounded-xl p-3 text-xs text-slate-300 mb-3">
+              <span className="font-semibold text-cyan-400 flex items-center gap-1.5 mb-1"><History className="w-3.5 h-3.5" /> Progress vs Previous Sessions</span>{report.progress}
+            </div>
+          )}
           {report.strengths && (
             <div className="bg-emerald-500/10 border border-emerald-500/25 rounded-xl p-3 text-xs text-slate-300 mb-3">
               <span className="font-semibold text-emerald-400 flex items-center gap-1.5 mb-1"><CheckCircle2 className="w-3.5 h-3.5" /> Strengths</span>{report.strengths}
